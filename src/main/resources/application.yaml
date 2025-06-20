@@ -1,0 +1,11 @@
+spring:
+  elasticsearch:
+    uris: http://localhost:9200 # ??? Elasticsearch ??
+#    uris: http://localhost:9999
+
+logging:
+  level:
+    org.elasticsearch.client: TRACE # Elasticsearch? ?? ??? ??
+
+server:
+  port: 38080
