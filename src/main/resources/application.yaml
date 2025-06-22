@@ -1,11 +1,24 @@
 spring:
   elasticsearch:
-    uris: http://localhost:9200 # ??? Elasticsearch ??
+    uris: http://localhost:9200
 #    uris: http://localhost:9999
+  datasource:
+    url: jdbc:mysql://localhost:3306/coupang
+    username: boki
+    password: password1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
 logging:
   level:
-    org.elasticsearch.client: TRACE # Elasticsearch? ?? ??? ??
+    org.elasticsearch.client: TRACE
+    org.hibernate.orm.jdbc.bind: TRACE
 
 server:
   port: 38080
