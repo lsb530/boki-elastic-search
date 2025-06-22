@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RequestMapping("/products")
@@ -35,6 +36,14 @@ class ProductController(
         val page = pageable.pageNumber
         val size = pageable.pageSize
         val response = productService.getProducts(page, size)
+        return ResponseEntity(response, HttpStatus.OK)
+    }
+
+    @GetMapping("/suggestions")
+    fun getProductsSuggestions(
+        @RequestParam(value = "query") query: String,
+    ): ResponseEntity<Any> {
+        val response = productService.getSuggestions(query)
         return ResponseEntity(response, HttpStatus.OK)
     }
 
