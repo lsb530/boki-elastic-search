@@ -1,25 +1,19 @@
 package boki.elasticsearchdemo.controller
 
 import boki.elasticsearchdemo.dto.CreateProductRequest
-import boki.elasticsearchdemo.dto.ProductResponse
+import boki.elasticsearchdemo.service.ProductQueryService
 import boki.elasticsearchdemo.service.ProductService
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/products")
 @RestController
 class ProductController(
     private val productService: ProductService,
+    private val productQueryService: ProductQueryService,
 ) {
     @PostMapping
     fun createProduct(
@@ -43,7 +37,25 @@ class ProductController(
     fun getProductsSuggestions(
         @RequestParam(value = "query") query: String,
     ): ResponseEntity<Any> {
-        val response = productService.getSuggestions(query)
+        val response = productQueryService.getSuggestions(query)
+        return ResponseEntity(response, HttpStatus.OK)
+    }
+
+    @GetMapping("/search")
+    fun searchProducts(
+        @RequestParam(value = "query") query: String,
+        @RequestParam(value = "category", required = false) category: String?,
+        @RequestParam(value = "minPrice", defaultValue = "0") minPrice: Double,
+        @RequestParam(value = "maxPrice", defaultValue = "100000000") maxPrice: Double,
+        @PageableDefault(page = 1, size = 5) pageable: Pageable
+    ): ResponseEntity<Any> {
+        val response = productQueryService.searchProducts(
+            query,
+            category,
+            minPrice,
+            maxPrice,
+            pageable
+        )
         return ResponseEntity(response, HttpStatus.OK)
     }
 
